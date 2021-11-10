@@ -4,6 +4,7 @@ namespace Zendesk\API\Utilities;
 
 use InvalidArgumentException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Zendesk\API\Exceptions\ApiResponseException;
@@ -38,7 +39,7 @@ class OAuth
 
         try {
             $request = new Request('POST', $authUrl, ['Content-Type' => 'application/json']);
-            $request = $request->withBody(\GuzzleHttp\Psr7\stream_for(json_encode($params)));
+            $request = $request->withBody(Utils::streamFor(json_encode($params)));
             $response = $client->send($request);
         } catch (RequestException $e) {
             throw new ApiResponseException($e);
