@@ -12,10 +12,11 @@ trait Delete
      *
      * @param int $id
      * @param string $routeKey
+     * @param array $deleteResourceFields     
      * @return bool
      * @throws MissingParametersException
      */
-    public function delete($id = null, $routeKey = __FUNCTION__)
+    public function delete($id = null, $routeKey = __FUNCTION__, array $deleteResourceFields = [])
     {
         if (empty($id)) {
             $chainedParameters = $this->getChainedParameters();
@@ -39,6 +40,9 @@ trait Delete
             $route = $this->resourceName . '/' . $id . '.json';
         }
 
-        return $this->client->delete($route);
+        return $this->client->delete(
+            $route,
+            count($deleteResourceFields) > 0 ? [$this->objectName => $deleteResourceFields] : null
+        );
     }
 }
